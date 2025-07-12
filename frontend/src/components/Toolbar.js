@@ -1,6 +1,12 @@
 import React from 'react';
+import WebSocketService from '../services/WebSocketService';
 
 const Toolbar = ({ tool, setTool, color, setColor, strokeWidth, setStrokeWidth }) => {
+  
+  const handleClear = () => {
+    WebSocketService.sendClearCanvas('room1');
+  };
+
   return (
     <div className="toolbar">
       <h2>CloudSketch</h2>
@@ -34,7 +40,7 @@ const Toolbar = ({ tool, setTool, color, setColor, strokeWidth, setStrokeWidth }
         <span>{strokeWidth}px</span>
       </div>
 
-      <button onClick={() => window.location.reload()}>Clear</button>
+      <button onClick={handleClear}>Clear Canvas</button>
     </div>
   );
 };

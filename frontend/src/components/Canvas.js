@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import WebSocketService from '../services/WebSocketService';
 
 const Canvas = ({ tool, color, strokeWidth }) => {
@@ -46,7 +46,7 @@ const Canvas = ({ tool, color, strokeWidth }) => {
     }
   };
 
-  const drawReceivedPath = (points) => {
+  const drawReceivedPath = useCallback((points) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     
@@ -64,7 +64,7 @@ const Canvas = ({ tool, color, strokeWidth }) => {
     ctx.lineCap = 'round';
     ctx.globalCompositeOperation = points[0].tool === 'eraser' ? 'destination-out' : 'source-over';
     ctx.stroke();
-  };
+  }, []);
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;

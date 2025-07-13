@@ -1,40 +1,22 @@
-package com.cloudsketch.whiteboard.model;
+package com.cloudsketch.whiteboard.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-@Entity
-@Table(name = "users", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "username")
-})
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class LoginRequest {
     @NotBlank
-    @Size(max = 50)
-    @Column(unique = true)
+    @Size(min = 3, max = 50)
     private String username;
 
     @NotBlank
-    @Size(max = 100)
+    @Size(min = 6, max = 40)
     private String password;
 
-    public User() {}
+    public LoginRequest() {}
 
-    public User(String username, String password) {
+    public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {

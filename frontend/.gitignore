@@ -1,35 +1,31 @@
-# Dependencies
-/node_modules
-/.pnp
-.pnp.js
+build/
+dist/
 
-# Testing
-/coverage
+node_modules/
 
-# Production
-/build
-
-# Misc
-.DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Runtime data
 pids
 *.pid
 *.seed
 *.pid.lock
 
-# IDE
+coverage/
+
+.nyc_output
+
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# OS
+.DS_Store
 Thumbs.db

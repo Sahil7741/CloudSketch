@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
     container_name: cloudsketch-db
@@ -16,7 +15,6 @@ services:
     networks:
       - cloudsketch-network
 
-  # Spring Boot Backend
   backend:
     build: ./backend
     container_name: cloudsketch-backend
@@ -34,7 +32,6 @@ services:
       - cloudsketch-network
     restart: unless-stopped
 
-  # React Frontend
   frontend:
     build: 
       context: ./frontend

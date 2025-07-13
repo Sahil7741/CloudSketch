@@ -1,34 +1,57 @@
 version: '3.8'
 
 services:
-  backend:
-    build: ./backend
-    ports:
-      - "8080:8080"
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: cloudsketch-db
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - redis
+      POSTGRES_DB: cloudsketch
+      POSTGRES_USER: cloudsketch_user
+      POSTGRES_PASSWORD: cloudsketch_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - cloudsketch-network
 
+  # Spring Boot Backend
+  backend:
+    build: ./backend
+    container_name: cloudsketch-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cloudsketch
+      SPRING_DATASOURCE_USERNAME: cloudsketch_user
+      SPRING_DATASOURCE_PASSWORD: cloudsketch_password
+      JWT_SECRET: myVerySecureJwtSecretKey123456789myVerySecureJwtSecretKey123456789
+      APP_CORS_ALLOWED_ORIGINS: http://localhost:3000,http://frontend:3000,http://127.0.0.1:3000
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - cloudsketch-network
+    restart: unless-stopped
+
+  # React Frontend
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: http://localhost:8080
+        REACT_APP_WS_URL: http://localhost:8080
+    container_name: cloudsketch-frontend
     ports:
       - "3000:3000"
-    environment:
-      - REACT_APP_BACKEND_URL=http://localhost:8080
     depends_on:
       - backend
     networks:
       - cloudsketch-network
+    restart: unless-stopped
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    networks:
-      - cloudsketch-network
+volumes:
+  postgres_data:
 
 networks:
   cloudsketch-network:
